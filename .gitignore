@@ -1,0 +1,25 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Caché de Python
+_pycache_/
+*.pyc
+
+# # Datos que genera la API al funcionar
+# datos/libros.json
+
+# Configuraciones sensibles
+.env
+*.env
+
+# Archivos del editor y del sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Cachés de herramientas
+.ruff_cache/
+.pytest_cache/
