@@ -1,10 +1,37 @@
 from fastapi import FastAPI, HTTPException
 from schema import LibroEntrada, LibroSalida, LibroParcial
+from pathlib import Path 
+import json
+import sys 
 
+
+sys.stdout.reconfigure(encoding="utf-8")
+
+CARPETA= Path(__file__).parent/ "datos"
+ARCHIVO= CARPETA/"libros.json"
+
+
+    
 app = FastAPI()
 
-libros_db = []
-proximo_id=1
+def guardar():
+    CARPETA.mkdir(exist_ok=True)
+    with open(ARCHIVO, "w", encoding="utf-8") as f:
+        json.dump(libros_db, f, ensure_ascii=False, indent=2)
+
+def cargar():
+    try:
+        with open(ARCHIVO, "r", encoding="utf-8") as f:
+            datos = json.load(f)
+        if isinstance(datos, list) and all(isinstance(libro, dict) and isinstance(libro.get("id"), int) for libro in datos ):
+            return datos
+    except(OSError, ValueError):
+        pass
+    return []
+    
+
+libros_db = cargar()
+proximo_id = max((libro["id"] for libro in libros_db), default=0) + 1
 
 @app.get("/")
 def inicio():
@@ -42,7 +69,7 @@ def crear_libro(libro: LibroEntrada) :
     nuevo = {"id" : proximo_id, **libro.model_dump()}
     libros_db.append(nuevo)
     proximo_id +=1
-    
+    guardar()
     return nuevo
 
 
@@ -52,6 +79,7 @@ def borrar_libro(libro_id: int):
     for libro in libros_db:
         if libro["id"] == libro_id:
             libros_db.remove(libro)
+            guardar()
             return
     raise HTTPException(status_code=404, detail="Libro no encontrado") 
 
@@ -62,6 +90,7 @@ def reemplazar_libro(libro_id: int, libro: LibroEntrada) :
         if existente["id"] == libro_id :
             actualizado = {"id": libro_id, **libro.model_dump() }
             libros_db[posicion] = actualizado
+            guardar()
             return actualizado
     raise HTTPException(status_code=404, detail="Libro no encontrado")
 
@@ -70,5 +99,6 @@ def actualizar_libro(libro_id: int, cambios: LibroParcial):
     for libro in libros_db:
         if libro["id"] == libro_id:
             libro.update(cambios.model_dump(exclude_unset=True))
+            guardar()
             return libro
     raise HTTPException(status_code=404, detail="Libro no encontrado")
