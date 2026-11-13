@@ -11,7 +11,7 @@ def inicio():
     return {"mensaje": "API de la biblioteca"}
 
 @app.get("/libros", response_model=list[LibroSalida])
-def listar_libros(autor: str | None = None, desde: int = 0, limite: int = 0, disponible: bool | None = None):
+def listar_libros(autor: str | None = None, desde: int = 0, limite: int = 100, disponible: bool | None = None):
     resultado = libros_db
     if autor is not None :
         resultado = [libro for libro in resultado if libro["autor"].lower() == autor.lower()]
@@ -45,3 +45,12 @@ def borrar_libro(libro_id: int):
             libros_db.remove(libro)
             return
     raise HTTPException(status_code=404, detail="Libro no encontrado") 
+
+@app.put("libros/{libro_id}", response_model= LibroSalida)
+def reemplazar_libro(libro_id: int, libro: LibroEntrada):
+    for posicion, existente in enumerate(libros_db):
+        if existente["id"] == libro_id :
+            actualizado = {"id": libros_db, **libro.model.dump()}
+            libros_db[posicion] = actualizado
+            return actualizado
+    raise HTTPException(status_code=404, detail="Libro no encontrado")
