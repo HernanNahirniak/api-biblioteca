@@ -8,7 +8,7 @@ _pycache_/
 *.pyc
 
 # # Datos que genera la API al funcionar
-# datos/libros.json
+ datos/libros.json
 
 # Configuraciones sensibles
 .env

@@ -1,1 +1,30 @@
-[]
+[
+  {
+    "id": 1,
+    "titulo": "Rayuela",
+    "autor": "Julio Cortázar",
+    "anio": 1963,
+    "disponible": true
+  },
+  {
+    "id": 2,
+    "titulo": "Cien años de soledad",
+    "autor": "Gabriel García Márquez",
+    "anio": 1967,
+    "disponible": true
+  },
+  {
+    "id": 3,
+    "titulo": "Ficciones",
+    "autor": "Jorge Luis Borges",
+    "anio": 1944,
+    "disponible": true
+  },
+  {
+    "id": 4,
+    "titulo": "Pedro Páramo",
+    "autor": "Juan Rulfo",
+    "anio": 1955,
+    "disponible": true
+  }
+]

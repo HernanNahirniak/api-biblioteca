@@ -47,7 +47,13 @@ def listar_libros(autor: str | None = None, desde: int = 0, limite: int = 100, d
     resultado = resultado[desde: desde + limite]
     return resultado
     
-    
+
+@app.get("/libros/buscar", response_model= list[LibroSalida])
+def buscar_libros(texto: str):
+    texto = texto.lower()
+    return[libro for libro in libros_db if texto in libro["titulo"].lower() or texto in libro["autor"].lower()]
+
+
 
 
 @app.get("/libros/{libro_id}", response_model= LibroSalida)
