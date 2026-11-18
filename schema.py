@@ -17,3 +17,8 @@ class LibroParcial(BaseModel):
     autor: str | None = Field(default=None, min_length=3, max_length=60)
     anio: int | None = Field(default=None, ge=1000, le=2100)
     disponible: bool | None = None
+    
+    
+    
+if __name__ == "__main__":
+    print("Demo de demostración, ejecutar 'main.py'")
